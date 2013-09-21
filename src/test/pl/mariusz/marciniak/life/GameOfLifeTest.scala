@@ -22,25 +22,49 @@ each generation is a pure function of the preceding one). The rules continue to 
 **/
 
   test("should create alive cell at any position") {
-    val incorrectCoordinates= for {
+    val incorrectCoordinates = for {
       x <- -50 to 50 by 3
       y <- -50 to 50 by 7
-      if(x != Cell("("+x+","+y+")").x || y != Cell("("+x+","+y+")").y)
-    } yield (x,y)
-    
+      if (x != Cell("(" + x + "," + y + ")").x || y != Cell("(" + x + "," + y + ")").y)
+    } yield (x, y)
+
     assert(incorrectCoordinates.size == 0)
   }
 
-  test("should throw exception if corrdinates have incorrect format") {
+  test("should throw exception if coordinates have incorrect format") {
     intercept[IncorrectCoordinates] {
-        Cell("[0;0]")
+      Cell("[0;0]")
     }
   }
 
-  test("should throw exception if too many corrdinates are passed") {
+  test("should throw exception if too many coordinates are passed") {
     intercept[IncorrectCoordinates] {
-        Cell("(234,33,299)")
+      Cell("(234,33,299)")
     }
+  }
+
+  test("should throw exception if any coordinate exceeds Int range") {
+    intercept[IncorrectCoordinates] {
+      Cell("(2147483648,-2147483649)")
+    }
+  }
+
+  test("should ignore whitespaces") {
+    Cell("  (0,0)   ")
+  }
+
+  test("import many lines of coordinates") {
+    val importCoordinates = """(0,0)
+      (1,0)
+      (21,-33)
+      (22,-33)"""
+    val generation = GameOfLife.importData(importCoordinates)
+    assert("Cell(0,0,true),Cell(1,0,true),Cell(21,-33,true),Cell(22,-33,true)" == generation.mkString(","))
+  }
+
+  test("center cell neighbours") {
+    val centerCell = Cell("(0,0)")
+    assert("(-1,-1),(0,-1),(1,-1),(-1,0),(1,0),(-1,1),(0,1),(1,1)"==centerCell.neighbours.mkString(","))
   }
 
 }
