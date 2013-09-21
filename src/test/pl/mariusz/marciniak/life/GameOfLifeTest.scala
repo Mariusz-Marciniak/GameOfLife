@@ -21,19 +21,26 @@ and deaths occur simultaneously, and the discrete moment at which this happens i
 each generation is a pure function of the preceding one). The rules continue to be applied repeatedly to create further generations.
 **/
 
-  test("does cell can live") {
-    val cell = new Cell(0,0)
-    cell.isAlive
+  test("should create alive cell at any position") {
+    val incorrectCoordinates= for {
+      x <- -50 to 50 by 3
+      y <- -50 to 50 by 7
+      if(x != Cell("("+x+","+y+")").x || y != Cell("("+x+","+y+")").y)
+    } yield (x,y)
+    
+    assert(incorrectCoordinates.size == 0)
   }
 
-  test("does cell has coordinates ") {
-    val cell = new Cell(0,0)
-    cell.x
-    cell.y
+  test("should throw exception if corrdinates have incorrect format") {
+    intercept[IncorrectCoordinates] {
+        Cell("[0;0]")
+    }
   }
 
-  test("create alive cell in center") {
-    val cell = Cell("(0,0)")
+  test("should throw exception if too many corrdinates are passed") {
+    intercept[IncorrectCoordinates] {
+        Cell("(234,33,299)")
+    }
   }
 
 }
