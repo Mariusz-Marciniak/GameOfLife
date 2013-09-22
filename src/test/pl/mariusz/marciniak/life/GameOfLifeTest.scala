@@ -23,8 +23,9 @@ and deaths occur simultaneously, and the discrete moment at which this happens i
 each generation is a pure function of the preceding one). The rules continue to be applied repeatedly to create further generations.
 **/
 
+  val sampleGeneration = Set(Cell(1,1),Cell(1,2),Cell(2,2),Cell(1,3),Cell(3,3))
   /**
-   * amount of times being neighbour in generation:
+   * amount of neighbours in generation:
    * 1   1   1
    * 2  {2}  3   1
    * 3  {3} {4}  2   1
@@ -32,9 +33,9 @@ each generation is a pure function of the preceding one). The rules continue to 
    * 1   1   2   1   1
    *
    * {x} - alive cell
-   * x  - being neighbour for x elements
+   * x  - being neighbour for x alive cells
    */
-  val amountOfTimesBeingNeighbourForGeneration = Map((0, 0) -> 1, (1, 0) -> 1, (2, 0) -> 1, (0, 1) -> 2, (1, 1) -> 2, (2, 1) -> 3, (3, 1) -> 1,
+  val amountOfNeighboursInSampleGeneration = Map((0, 0) -> 1, (1, 0) -> 1, (2, 0) -> 1, (0, 1) -> 2, (1, 1) -> 2, (2, 1) -> 3, (3, 1) -> 1,
     (0, 2) -> 3, (1, 2) -> 3, (2, 2) -> 4, (3, 2) -> 2, (4, 2) -> 1,
     (0, 3) -> 2, (1, 3) -> 2, (2, 3) -> 4, (3, 3) -> 1, (4, 3) -> 1,
     (0, 4) -> 1, (1, 4) -> 1, (2, 4) -> 2, (3, 4) -> 1, (4, 4) -> 1)
@@ -101,32 +102,55 @@ each generation is a pure function of the preceding one). The rules continue to 
     val expectedNeighours = Map((-1, -1) -> 1, (-1, 0) -> 1, (-1, 1) -> 1, (0, -1) -> 2, (0, 1) -> 3, (1, -1) -> 2, (1, 0) -> 2, (1, 1) -> 2,
       (0, 0) -> 2, (0, 2) -> 1, (1, 2) -> 1, (2, 0) -> 2, (2, 1) -> 2, (2, 2) -> 1, (2, -1) -> 1)
 
-    val amountOfTimesBeingNeighbour: Map[Coordinates, Int] = GameOfLife.amountOfTimesBeingNeighbour(generation)
-    assert((amountOfTimesBeingNeighbour.filterNot { case (key, value) => expectedNeighours(key) == value }).isEmpty)
+    val amountOfNeighbours: Map[Coordinates, Int] = GameOfLife.amountOfNeighbours(generation)
+    assert((amountOfNeighbours.filterNot { case (key, value) => expectedNeighours(key) == value }).isEmpty)
   }
 
   test("should die if less than 2 neighbours") {
     val cell = new Cell(3, 3)
 
-    assert(GameOfLife.shouldDie(cell, amountOfTimesBeingNeighbourForGeneration) == true)
+    assert(GameOfLife.shouldDie(cell, amountOfNeighboursInSampleGeneration) == true)
   }
 
   test("should stay alive if has 2 neighbours") {
     val cell = new Cell(1, 1)
 
-    assert(GameOfLife.shouldDie(cell, amountOfTimesBeingNeighbourForGeneration) == false)
+    assert(GameOfLife.shouldDie(cell, amountOfNeighboursInSampleGeneration) == false)
   }
 
   test("should stay alive if has 3 neighbours") {
     val cell = new Cell(1, 2)
 
-    assert(GameOfLife.shouldDie(cell, amountOfTimesBeingNeighbourForGeneration) == false)
+    assert(GameOfLife.shouldDie(cell, amountOfNeighboursInSampleGeneration) == false)
   }
 
   test("should die if greater than 3 neighbours") {
     val cell = new Cell(2, 2)
 
-    assert(GameOfLife.shouldDie(cell, amountOfTimesBeingNeighbourForGeneration) == true)
+    assert(GameOfLife.shouldDie(cell, amountOfNeighboursInSampleGeneration) == true)
+  }
+
+  test("remove dead cells") {
+    assert(GameOfLife.removeDeadCells(Set(Cell(1,1), Cell(2,1,false), Cell(3,4, false))).size == 1)
+  }
+
+  test ("shouldn't allow duplicates in generation") {
+    val generationWithDuplicates : GameOfLife.Generation = Set(Cell(1,1),Cell(1,1,false),Cell(1,1))
+    assert(generationWithDuplicates.size == 1)
+  }
+
+  test("find all dead cells with exacly 3 neighbours") {
+    val offsprings = GameOfLife.findOffsprings(sampleGeneration)
+    assert(offsprings.size == 2)
+    assert(offsprings.contains((2,1)) == true)
+    assert(offsprings.contains((0,2)) == true)
+    
+  }
+  
+  test("prepare next generation") {
+    val expectedNextGeneration = Set(Cell(1,1),Cell(2,1),Cell(0,2),Cell(1,2),Cell(2,2,false),Cell(1,3),Cell(3,3,false))
+    
+    assert(expectedNextGeneration.sameElements(GameOfLife.nextGeneration(sampleGeneration)) == true)
   }
 
 }
