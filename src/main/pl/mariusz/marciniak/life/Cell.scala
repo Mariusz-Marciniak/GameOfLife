@@ -21,7 +21,7 @@ case class Cell(x: Int, y: Int, isAlive: Boolean = true) {
   def neighboursCoordinates(): List[Coordinates] = {
     List((x - 1, y - 1), (x, y - 1), (x + 1, y - 1), (x - 1, y), (x + 1, y), (x - 1, y + 1), (x, y + 1), (x + 1, y + 1))
   }
-
+  
   override def hashCode = 41 * (41 + x) + y
   override def equals(other: Any): Boolean = other match {
     case that: Cell => (
