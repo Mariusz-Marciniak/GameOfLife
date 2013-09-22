@@ -1,5 +1,9 @@
 package pl.mariusz.marciniak.life
 
+import scala.io.Source
+import java.io.FileNotFoundException
+import java.io.File
+
 object GameOfLife {
   type Generation = Set[Cell]
   type Coordinates = Tuple2[Int, Int]
@@ -25,7 +29,7 @@ object GameOfLife {
   }
 
   def shouldDie(c: Cell, n: Map[Coordinates, Int]): Boolean = {
-    val beingNeighbourFor = if(n.contains((c.x, c.y))) n((c.x, c.y)) else 0
+    val beingNeighbourFor = if (n.contains((c.x, c.y))) n((c.x, c.y)) else 0
     underPopulation(beingNeighbourFor) || overPopulation(beingNeighbourFor)
   }
 
@@ -46,10 +50,20 @@ object GameOfLife {
   def bornCells(c: Set[Coordinates]): Generation = c map { case (x, y) => new Cell(x, y) }
 
   def main(args: Array[String]) {
-    val f = new GameOfLifeFrame
-    f.init
-    f.open
-    f.startLive(Set(Cell(1,1),Cell(1,2),Cell(2,2),Cell(1,3),Cell(3,3)))
+    if (args.length > 0) {
+      try {
+        val file = new File(".")
+        val data = Source.fromFile(args(0)).mkString
+        val f = new GameOfLifeFrame
+        f.init
+        f.open
+        f.startLive(importData(data))
+      } catch {
+        case e: FileNotFoundException => println("File " + args(0) + " not found")
+      }
+    } else {
+      println("Required file name")
+    }
   }
 }
 

@@ -18,7 +18,7 @@ class GameOfLifeFrame extends MainFrame {
     def loop(g: Generation): Generation = {
       panel.generation_=(g)
       panel.repaint
-      Thread.sleep(1000)
+      panel.graphicalPresenter.sleep
       loop(GameOfLife.nextGeneration(g))
     }
     loop(g)

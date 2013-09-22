@@ -18,10 +18,13 @@ class GraphicalPresenter(val horizontalZero: Int, val verticalZero: Int) {
   val AliveCellColor = Color.BLUE
   val DeadCellColor = Color.RED
   val PointSize = 3
+  val Delay = 100
 
   def color(cell: Cell): Color = if (cell.isAlive) AliveCellColor else DeadCellColor
 
   def shape(cell: Cell): Shape =
     new Rectangle(horizontalZero + cell.x*PointSize, verticalZero + cell.y*PointSize, PointSize, PointSize)
+  
+  def sleep = Thread.sleep(Delay)
 
 }

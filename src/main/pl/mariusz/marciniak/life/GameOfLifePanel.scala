@@ -19,6 +19,8 @@ class GameOfLifePanel extends BorderPanel {
 
   def generation_=(g: Generation):Unit = gen = g
   
+  def graphicalPresenter = gp
+  
   override def paintComponent(g: Graphics2D): Unit = {
     super.paintComponent(g);
     gen foreach {case c => g.setColor(gp.color(c)); g.fill(gp.shape(c)) }
