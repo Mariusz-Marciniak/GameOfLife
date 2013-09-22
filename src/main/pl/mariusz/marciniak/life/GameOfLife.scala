@@ -25,7 +25,7 @@ object GameOfLife {
   }
 
   def shouldDie(c: Cell, n: Map[Coordinates, Int]): Boolean = {
-    val beingNeighbourFor = n((c.x, c.y))
+    val beingNeighbourFor = if(n.contains((c.x, c.y))) n((c.x, c.y)) else 0
     underPopulation(beingNeighbourFor) || overPopulation(beingNeighbourFor)
   }
 
@@ -49,6 +49,7 @@ object GameOfLife {
     val f = new GameOfLifeFrame
     f.init
     f.open
+    f.startLive(Set(Cell(1,1),Cell(1,2),Cell(2,2),Cell(1,3),Cell(3,3)))
   }
 }
 

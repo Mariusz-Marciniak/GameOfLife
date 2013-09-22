@@ -8,12 +8,16 @@ import scala.swing.BorderPanel
 @RunWith(classOf[JUnitRunner])
 class GraphicalPresenterTest extends FunSuite {
 
-  test("should be able to create drawable cell")  {
-    new DrawableCell(new Cell(0,0))
+  val gp = GraphicalPresenter(new BorderPanel) 
+
+  test("should be able to draw cell") {
+    assert(gp.shape(new Cell(0,0)) != null)
+  }
+
+  test("should be able to have different colors for alive and dead cells") {
+    val cAlive = new Cell(0,0)
+    val cDead = new Cell(0,0,false)
+    assert(gp.color(cAlive) != gp.color(cDead))
   }
   
-  test("should be able to draw cell") {
-    val dc = new DrawableCell(new Cell(0,0))
-    assert(dc.shape(new BorderPanel) != null)
-  }
 }

@@ -112,6 +112,12 @@ each generation is a pure function of the preceding one). The rules continue to 
     assert(GameOfLife.shouldDie(cell, amountOfNeighboursInSampleGeneration) == true)
   }
 
+  test("should assume 0 neighbours if out of neighbourhood") {
+    val cell = new Cell(10, 23)
+
+    assert(GameOfLife.shouldDie(cell, amountOfNeighboursInSampleGeneration) == true)
+  }
+
   test("should stay alive if has 2 neighbours") {
     val cell = new Cell(1, 1)
 

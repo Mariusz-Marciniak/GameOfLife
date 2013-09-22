@@ -8,17 +8,20 @@ import java.awt.Rectangle
 
 class GameOfLifePanel extends BorderPanel {
 
-  private var gen : Set[DrawableCell] = _
+  private var gen : Generation = _
   
+  private var gp : GraphicalPresenter = _
   
   def init = {
     background = Color.WHITE
+    gp = GraphicalPresenter(this)
   }
-  
-  def generation_=(g: Set[DrawableCell]):Unit = gen = g
+
+  def generation_=(g: Generation):Unit = gen = g
   
   override def paintComponent(g: Graphics2D): Unit = {
     super.paintComponent(g);
+    gen foreach {case c => g.setColor(gp.color(c)); g.fill(gp.shape(c)) }
   }
 
 }
