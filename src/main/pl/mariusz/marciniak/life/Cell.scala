@@ -1,5 +1,7 @@
 package pl.mariusz.marciniak.life
 
+import pl.mariusz.marciniak.life.GameOfLife.Coordinates;
+
 object Cell {
   def apply(cell: String): Cell = {
     val trimmedCell = cell.trim();
@@ -16,7 +18,7 @@ object Cell {
 
 }
 case class Cell(x: Int, y: Int, isAlive: Boolean = true) {
-    def neighbours() : List[Tuple2[Int,Int]] = {
+    def neighboursCoordinates() : List[Coordinates] = {
       List((x-1,y-1),(x,y-1),(x+1,y-1),(x-1,y),(x+1,y),(x-1,y+1),(x,y+1),(x+1,y+1))
     }
 }
