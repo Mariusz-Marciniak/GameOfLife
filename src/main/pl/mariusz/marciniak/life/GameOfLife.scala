@@ -54,12 +54,14 @@ object GameOfLife {
       try {
         val file = new File(".")
         val data = Source.fromFile(args(0)).mkString
+        val generation = importData(data)
         val f = new GameOfLifeFrame
         f.init
         f.open
-        f.startLive(importData(data))
+        f.startLive(generation)
       } catch {
         case e: FileNotFoundException => println("File " + args(0) + " not found")
+        case e: IncorrectCoordinates => println("Incorrct data in file " + args(0))
       }
     } else {
       println("Required file name")
