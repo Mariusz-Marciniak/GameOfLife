@@ -83,9 +83,30 @@ each generation is a pure function of the preceding one). The rules continue to 
   }
 
   test("import sketch with one element") {
+    val expected = Set(Cell(0,0))
     val sketch = "#"
     val generation = GameOfLife.importData(sketch)
-    assert("Cell(0,0,true)" == generation.mkString(","))
+
+    assert(expected.sameElements(generation))
+  }
+
+  test("import sketch with many elements in one line") {
+    val expected = Set(Cell(-2,0),Cell(-1,0),Cell(0,0),Cell(2,0))
+    val sketch = "### #"
+    val generation = GameOfLife.importData(sketch)
+    
+    assert(expected.sameElements(generation))
+  }
+
+  test("import sketch with many elements in multiple lines") {
+    val expected = Set(Cell(-1,-1),Cell(0,-1),Cell(1,-1),Cell(3,-1),Cell(-2,0),Cell(-1,0),Cell(2,0),Cell(-1,1))
+    val sketch = """
+  ### #
+ ##  #
+  #"""
+    val generation = GameOfLife.importData(sketch)
+    
+    assert(expected.sameElements(generation))
   }
 
   test("enumerate any cell neighbours' coordinates") {

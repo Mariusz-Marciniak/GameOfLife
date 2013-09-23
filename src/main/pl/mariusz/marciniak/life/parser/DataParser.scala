@@ -34,6 +34,11 @@ class CellCoordinatesDataParser extends DataParser {
 
 class SketchDataParser extends DataParser {
 	def importData(data: String): Generation = {
-	  Set[Cell](Cell(0,0))
+	  val maxElements = data.trim().length()
+	  val horizontalZero =  maxElements / 2
+	  (for {
+	    x <- 0 to data.length()-1
+	    if(data.charAt(x) != ' ')
+	  } yield Cell(x - horizontalZero,0)).toSet
 	}
 } 
