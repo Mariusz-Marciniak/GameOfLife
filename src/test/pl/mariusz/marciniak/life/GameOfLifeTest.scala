@@ -6,6 +6,7 @@ import org.scalatest.FunSuite
 import org.scalatest.BeforeAndAfter
 import scala.util.Random
 import pl.mariusz.marciniak.life.GameOfLife.Coordinates;
+import pl.mariusz.marciniak.life.parser.IncorrectCoordinates
 
 @RunWith(classOf[JUnitRunner])
 class GameOfLifeTest extends FunSuite with BeforeAndAfter {
@@ -79,6 +80,12 @@ each generation is a pure function of the preceding one). The rules continue to 
       (22,-33)"""
     val generation = GameOfLife.importData(importCoordinates)
     assert("Cell(0,0,true),Cell(1,0,true),Cell(21,-33,true),Cell(22,-33,true)" == generation.mkString(","))
+  }
+
+  test("import sketch with one element") {
+    val sketch = "#"
+    val generation = GameOfLife.importData(sketch)
+    assert("Cell(0,0,true)" == generation.mkString(","))
   }
 
   test("enumerate any cell neighbours' coordinates") {

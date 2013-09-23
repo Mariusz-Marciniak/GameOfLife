@@ -3,12 +3,15 @@ package pl.mariusz.marciniak.life
 import scala.io.Source
 import java.io.FileNotFoundException
 import java.io.File
+import pl.mariusz.marciniak.life.parser.IncorrectCoordinates
+import pl.mariusz.marciniak.life.parser.DataParser
+import pl.mariusz.marciniak.life.parser.ParsingException
 
 object GameOfLife {
   type Generation = Set[Cell]
   type Coordinates = Tuple2[Int, Int]
 
-  def importData(data: String): Generation = (data.split("\\n") map (line => Cell(line))).toSet
+  def importData(data: String): Generation = DataParser.importData(data)
 
   def findOffsprings(g: Generation): Set[Coordinates] = findOffsprings(removeDeadCells(g), amountOfNeighbours(g))
 
@@ -61,7 +64,8 @@ object GameOfLife {
         f.startLive(generation)
       } catch {
         case e: FileNotFoundException => println("File " + args(0) + " not found")
-        case e: IncorrectCoordinates => println("Incorrct data in file " + args(0))
+        case e: ParsingException => println(e.message)
+        case e: IncorrectCoordinates => println("Incorrect coordinates in file " + args(0))
       }
     } else {
       println("Required file name")

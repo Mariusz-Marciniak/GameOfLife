@@ -1,6 +1,7 @@
 package pl.mariusz.marciniak.life
 
 import pl.mariusz.marciniak.life.GameOfLife.Coordinates;
+import pl.mariusz.marciniak.life.parser.IncorrectCoordinates
 
 object Cell {
   def apply(cell: String): Cell = {
