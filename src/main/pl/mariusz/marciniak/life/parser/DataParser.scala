@@ -50,7 +50,6 @@ class SketchDataParser extends DataParser {
     val firstNotSpaceInLine = lines.map(l => l.indexWhere(_ != ' ')).min
     val lastNotSpaceInLine = lines.map(l => l.length - l.reverse.indexWhere(_ != ' ')).max
     val width = lastNotSpaceInLine - firstNotSpaceInLine
-    println(firstNotSpaceInLine + "::" + lastNotSpaceInLine + "::" + width)
     val horizontalZero = (width + firstNotSpaceInLine) / 2
     val verticalZero = lines.size / 2
 
@@ -59,13 +58,10 @@ class SketchDataParser extends DataParser {
         agg
       else {
         val l = leftLines.head
-        println("---" + l + "---")
         val cells = (for {
           x <- firstNotSpaceInLine until Math.min(lastNotSpaceInLine, l.length)
           if (l.charAt(x) != ' ')
         } yield Cell(x - horizontalZero, y - verticalZero)).toSet
-        println(cells)
-        println("________________________")
         importHeadLine(leftLines.tail, y + 1, agg ++ cells)
       }
     }
