@@ -61,7 +61,7 @@ class SketchDataParser extends DataParser {
         val cells = (for {
           x <- firstNotSpaceInLine until Math.min(lastNotSpaceInLine, l.length)
           if (l.charAt(x) != ' ')
-        } yield Cell(x - horizontalZero, y - verticalZero)).toSet
+        } yield Cell(x - horizontalZero, y - verticalZero)()).toSet
         importHeadLine(leftLines.tail, y + 1, agg ++ cells)
       }
     }

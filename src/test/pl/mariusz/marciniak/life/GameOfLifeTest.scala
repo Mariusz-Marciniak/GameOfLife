@@ -24,7 +24,7 @@ and deaths occur simultaneously, and the discrete moment at which this happens i
 each generation is a pure function of the preceding one). The rules continue to be applied repeatedly to create further generations.
 **/
 
-  val sampleGeneration = Set(Cell(1,1),Cell(1,2),Cell(2,2),Cell(1,3),Cell(3,3))
+  val sampleGeneration = Set(Cell(1,1)(),Cell(1,2)(),Cell(2,2)(),Cell(1,3)(),Cell(3,3)())
   /**
    * amount of neighbours in generation:
    * 1   1   1
@@ -99,41 +99,41 @@ each generation is a pure function of the preceding one). The rules continue to 
   }
 
   test("should die if less than 2 neighbours") {
-    val cell = new Cell(3, 3)
+    val cell = new Cell(3, 3)()
 
     assert(GameOfLife.shouldDie(cell, amountOfNeighboursInSampleGeneration) == true)
   }
 
   test("should assume 0 neighbours if out of neighbourhood") {
-    val cell = new Cell(10, 23)
+    val cell = new Cell(10, 23)()
 
     assert(GameOfLife.shouldDie(cell, amountOfNeighboursInSampleGeneration) == true)
   }
 
   test("should stay alive if has 2 neighbours") {
-    val cell = new Cell(1, 1)
+    val cell = new Cell(1, 1)()
 
     assert(GameOfLife.shouldDie(cell, amountOfNeighboursInSampleGeneration) == false)
   }
 
   test("should stay alive if has 3 neighbours") {
-    val cell = new Cell(1, 2)
+    val cell = new Cell(1, 2)()
 
     assert(GameOfLife.shouldDie(cell, amountOfNeighboursInSampleGeneration) == false)
   }
 
   test("should die if greater than 3 neighbours") {
-    val cell = new Cell(2, 2)
+    val cell = new Cell(2, 2)()
 
     assert(GameOfLife.shouldDie(cell, amountOfNeighboursInSampleGeneration) == true)
   }
 
   test("remove dead cells") {
-    assert(GameOfLife.removeDeadCells(Set(Cell(1,1), Cell(2,1,false), Cell(3,4, false))).size == 1)
+    assert(GameOfLife.removeDeadCells(Set(Cell(1,1)(), Cell(2,1)(false), Cell(3,4) (false))).size == 1)
   }
 
   test ("shouldn't allow duplicates in generation") {
-    val generationWithDuplicates : GameOfLife.Generation = Set(Cell(1,1),Cell(1,1,false),Cell(1,1))
+    val generationWithDuplicates : GameOfLife.Generation = Set(Cell(1,1)(),Cell(1,1)(false),Cell(1,1)())
     assert(generationWithDuplicates.size == 1)
   }
 
@@ -146,7 +146,7 @@ each generation is a pure function of the preceding one). The rules continue to 
   }
   
   test("prepare next generation") {
-    val expectedNextGeneration = Set(Cell(1,1),Cell(2,1),Cell(0,2),Cell(1,2),Cell(2,2,false),Cell(1,3),Cell(3,3,false))
+    val expectedNextGeneration = Set(Cell(1,1)(),Cell(2,1)(),Cell(0,2)(),Cell(1,2)(),Cell(2,2)(false),Cell(1,3)(),Cell(3,3)(false))
     
     assert(expectedNextGeneration.sameElements(GameOfLife.nextGeneration(sampleGeneration)) == true)
   }

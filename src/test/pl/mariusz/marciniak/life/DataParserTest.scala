@@ -20,11 +20,11 @@ class DataParserTest extends FunSuite {
       (21,-33)
       (22,-33)"""
     val generation = DataParser.importData(importCoordinates, cellCoordinatesDataParser)
-    assert("Cell(0,0,true),Cell(1,0,true),Cell(21,-33,true),Cell(22,-33,true)" == generation.mkString(","))
+    assert("Cell(0,0),Cell(1,0),Cell(21,-33),Cell(22,-33)" == generation.mkString(","))
   }
 
   test("import sketch with one element") {
-    val expected = Set(Cell(0, 0))
+    val expected = Set(Cell(0, 0)())
     val sketch = "#"
     val generation = DataParser.importData(sketch, sketchDataParser)
 
@@ -32,7 +32,7 @@ class DataParserTest extends FunSuite {
   }
 
   test("import sketch with many elements in one line") {
-    val expected = Set(Cell(-2, 0), Cell(-1, 0), Cell(0, 0), Cell(2, 0))
+    val expected = Set(Cell(-2, 0)(), Cell(-1, 0)(), Cell(0, 0)(), Cell(2, 0)())
     val sketch = "### #"
     val generation = DataParser.importData(sketch, sketchDataParser)
 
@@ -40,7 +40,7 @@ class DataParserTest extends FunSuite {
   }
 
   test("import sketch with many elements in multiple lines") {
-    val expected = Set(Cell(-1, -1), Cell(0, -1), Cell(1, -1), Cell(3, -1), Cell(-3, 0), Cell(-2, 0), Cell(-1, 0), Cell(2, 0), Cell(-1, 1))
+    val expected = Set(Cell(-1, -1)(), Cell(0, -1)(), Cell(1, -1)(), Cell(3, -1)(), Cell(-3, 0)(), Cell(-2, 0)(), Cell(-1, 0)(), Cell(2, 0)(), Cell(-1, 1)())
     val sketch = """
   ### #
 ###  #
@@ -51,7 +51,7 @@ class DataParserTest extends FunSuite {
   }
 
   test("import sketch with negligible whitespaces") {
-    val expected = Set(Cell(-2, -1), Cell(2, 0), Cell(3, 0))
+    val expected = Set(Cell(-2, -1)(), Cell(2, 0)(), Cell(3, 0)())
     val sketch = """
   #
       ##     """
